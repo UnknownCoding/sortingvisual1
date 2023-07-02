@@ -1,5 +1,6 @@
 const n = 10;
 let array = []
+let audio = null
 
 init()
 
@@ -8,6 +9,18 @@ function init(){
         array[i] = Math.random()
     }
     showBars()
+}
+
+function playNote(freq){
+    if(audio==null){
+        audio = new(AudioContext || webkitAudioContext || window.webkitAudioContext)()
+    }
+    const dur = 0.1;
+    const osc = audio.createOscillator()
+    osc.frequency.value = freq
+    osc.start()
+    osc.stop(audio.currentTime+dur)
+    osc.connect(audio.destination)
 }
 
 function showBars(move){
@@ -40,6 +53,8 @@ function animate(moves){
             array[i] = array[j]
             array[j] = temp
         }
+        playNote(100+array[i]*300)
+        playNote(100+array[j]*300)
         showBars(move);
         setTimeout(()=>{
             animate(moves)
