@@ -20,7 +20,11 @@ function playNote(freq){
     osc.frequency.value = freq
     osc.start()
     osc.stop(audio.currentTime+dur)
-    osc.connect(audio.destination)
+    const node = audio.createGain()
+    node.gain.value = 0.1
+    node.gain.linearRampToValueAtTime(0,audio.currentTime+dur)
+    osc.connect(node)
+    node.connect(audio.destination)
 }
 
 function showBars(move){
